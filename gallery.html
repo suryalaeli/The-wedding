@@ -102,7 +102,7 @@
 
     <script>
         // GANTI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw4yIWS-foqFjDCMoBllcGOTafofG70I0e8bYOMZBXyxttLeAMWBYd6TnskomyKXLQpIg/exec";
+        const WEB_APP_URL = "PASTE_URL_WEB_APP_APPS_SCRIPT_DISINI";
 
         function muatGaleri() {
             fetch(WEB_APP_URL)
@@ -118,31 +118,33 @@
                     if(res.result === "success" && res.data.length > 0) {
                         // Urutkan data dari yang terbaru (membalikkan urutan array)
                         const dataTerbaru = res.data.reverse();
-dataTerbaru.forEach(tamu => {
-    // Sesuai dengan nama kolom atau properti JSON yang Anda kirim dari Apps Script.
-    // Jika di JSON namanya 'linkFoto', gunakan tamu.linkFoto. Jika 'fileUrl', gunakan tamu.fileUrl
-    let srcFoto = tamu.linkFoto || tamu.fileUrl || tamu.url; 
 
-    // Jika karena suatu hal linkFoto kosong, kita beri gambar placeholder/default agar tidak pecah
-    if (!srcFoto) {
-        srcFoto = "https://placehold.co/600x400?text=Foto+Tidak+Ditemukan";
-    }
+                        dataTerbaru.forEach(tamu => {
+                            // Mengubah link standar GDrive menjadi link direct image agar bisa tampil di tag <img>
+                            // Mengubah 'open?id=' atau 'file/d/.../view' menjadi 'uc?export=view&id='
+                            let srcFoto = tamu.linkFoto;
+                            if (srcFoto.includes('id=')) {
+                                const id = srcFoto.split('id=')[1];
+                                srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
+                            } else if (srcFoto.includes('/d/')) {
+                                const id = srcFoto.split('/d/')[1].split('/')[0];
+                                srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
+                            }
 
-    // Template HTML untuk setiap kartu foto
-    const card = `
-        <div class="photo-card">
-            <div class="photo-wrapper">
-                <img src="${srcFoto}" alt="Foto dari ${tamu.nama}" loading="lazy">
-            </div>
-            <div class="card-body">
-                <div class="guest-name">✨ ${tamu.nama}</div>
-                <div class="guest-wish">"${tamu.keterangan}"</div>
-            </div>
-        </div>
-    `;
-    
-    grid.innerHTML += card;
-});
+                            // Template HTML untuk setiap kartu foto
+                            const card = `
+                                <div class="photo-card">
+                                    <div class="photo-wrapper">
+                                        <img src="${srcFoto}" alt="Foto dari ${tamu.nama}" loading="lazy">
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="guest-name">✨ ${tamu.nama}</div>
+                                        <div class="guest-wish">"${tamu.keterangan}"</div>
+                                    </div>
+                                </div>
+                            `;
+                            grid.innerHTML += card;
+                        });
                     } else {
                         grid.innerHTML = `<p style="text-align:center; grid-column: 1/-1; color:#7f8c8d;">Belum ada foto yang dibagikan.</p>`;
                     }
