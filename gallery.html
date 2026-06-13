@@ -1,126 +1,190 @@
+   
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Gallery - Album Foto Tamu</title>
+    <title>Instagram-Style Guest Gallery</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edea 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fafafa;
+            color: #262626;
+            padding-bottom: 50px;
+        }
+
+        /* Header Ala Profil Instagram */
+        .instagram-header {
+            max-width: 935px;
+            margin: 0 auto;
             padding: 40px 20px;
-            color: #333; 
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 2.5rem;
-            color: #2c3e50;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        p.subtitle {
-            text-align: center;
-            margin-bottom: 40px;
-            color: #7f8c8d;
-            font-style: italic;
-        }
-        /* Grid Layout Estetis */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
-            margin: auto;
-        }
-        /* Desain Kartu Foto */
-        .photo-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            border-bottom: 1px solid #dbdbdb;
         }
-        .photo-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            padding: 4px;
+            margin-right: 60px;
         }
-        .photo-wrapper {
-            width: 100%;
-            height: 350px; /* Tinggi seragam agar rapi */
-            overflow: hidden;
-            background-color: #f0f0f0;
-        }
-        .photo-wrapper img {
+        .profile-avatar img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Foto otomatis terpotong rapi tanpa distorsi */
-            transition: transform 0.5s ease;
+            border-radius: 50%;
+            object-fit: cover;
+            background: white;
+            border: 4px solid white;
         }
-        .photo-card:hover .photo-wrapper img {
-            transform: scale(1.05);
+        .profile-info h1 {
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 15px;
         }
-        /* Detail Teks */
-        .card-body {
-            padding: 20px;
+        .profile-bio {
+            font-size: 16px;
+            line-height: 24px;
+        }
+        .profile-bio strong { font-weight: 600; }
+
+        /* Grid Foto 3 Kolom (Instagram Feed) */
+        .instagram-feed {
+            max-width: 935px;
+            margin: 30px auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px; /* Jarak antar foto standar IG Desktop */
+            padding: 0 20px;
+        }
+
+        /* Item Foto berbentuk Kotak 1:1 */
+        .feed-item {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* Trik CSS untuk memaksa rasio 1:1 (Kotak Sempurna) */
+            cursor: pointer;
+            overflow: hidden;
+            background-color: #efefef;
+        }
+        .feed-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: filter 0.3s ease;
+        }
+
+        /* Overlay Gelap Saat Hover (Muncul Nama & Ucapan) */
+        .feed-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+            text-align: center;
         }
-        .guest-name {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #2c3e50;
+        .feed-item:hover .feed-overlay {
+            opacity: 1;
+        }
+        .overlay-name {
+            font-weight: 700;
+            font-size: 18px;
             margin-bottom: 8px;
         }
-        .guest-wish {
-            font-size: 0.95rem;
-            color: #555;
-            line-height: 1.5;
-            font-style: italic;
-            flex-grow: 1;
+        .overlay-wish {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.4;
         }
-        /* Loading Animasi */
+
+        /* Indikator Loading */
         .loader {
             text-align: center;
-            font-size: 1.2rem;
-            color: #7f8c8d;
-            margin-top: 50px;
+            padding: 50px;
+            font-size: 16px;
+            color: #8e8e8e;
+        }
+
+        /* Responsif untuk HP (Gap mengecil seperti aplikasi IG asli) */
+        @media (max-width: 768px) {
+            .instagram-header {
+                padding: 20px;
+                flex-direction: row;
+            }
+            .profile-avatar {
+                width: 90px;
+                height: 90px;
+                margin-right: 25px;
+            }
+            .profile-info h1 { font-size: 22px; }
+            .instagram-feed {
+                gap: 3px; /* Gap sangat tipis ala IG Mobile */
+                padding: 0;
+            }
+            /* Pada HP, buat ucapan langsung terlihat sedikit di bawah atau tetap overlay saat ditgetuk */
+            .feed-overlay { padding: 10px; }
+            .overlay-name { font-size: 14px; }
+            .overlay-wish { font-size: 11px; }
         }
     </style>
 </head>
 <body>
 
-    <h1>📸 DIGITAL ALBUM & WISHES</h1>
-    <p class="subtitle">Kumpulan momen bahagia dan ucapan dari para tamu undangan</p>
+    <!-- Bagian Profil Atas -->
+    <header class="instagram-header">
+        <div class="profile-avatar">
+            <!-- Ganti dengan foto pengantin / logo acara -->
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=500" alt="Acara Logo">
+        </div>
+        <div class="profile-info">
+            <h1>budi.annisa.wedding</h1>
+            <div class="profile-bio">
+                <strong>Budi & Annisa Digital Album</strong><br>
+                ✨ Diabadikan oleh para tamu undangan kesayangan.<br>
+                📍 Gedung Serbaguna, Jakarta
+            </div>
+        </div>
+    </header>
 
-    <div id="loader" class="loader">Memuat foto-foto kenangan...</div>
-    <div class="gallery-grid" id="galleryGrid"></div>
+    <!-- Kontainer Feed Foto -->
+    <div id="loader" class="loader">Memuat feed galeri...</div>
+    <main class="instagram-feed" id="instagramFeed"></main>
 
     <script>
         // GANTI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
       const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw4yIWS-foqFjDCMoBllcGOTafofG70I0e8bYOMZBXyxttLeAMWBYd6TnskomyKXLQpIg/exec";
-        function muatGaleri() {
+
+        function muatGaleriInstagram() {
             fetch(WEB_APP_URL)
                 .then(response => response.json())
                 .then(res => {
                     const loader = document.getElementById('loader');
-                    const grid = document.getElementById('galleryGrid');
+                    const feed = document.getElementById('instagramFeed');
                     
-                    // Sembunyikan loader
                     loader.style.display = 'none';
-                    grid.innerHTML = ''; // Kosongkan grid sebelum diisi data baru
+                    feed.innerHTML = ''; 
 
                     if(res.result === "success" && res.data.length > 0) {
-                        // Urutkan data dari yang terbaru (membalikkan urutan array)
+                        // Urutkan dari foto yang paling baru diupload (seperti feed nyata)
                         const dataTerbaru = res.data.reverse();
 
                         dataTerbaru.forEach(tamu => {
-                            // Mengubah link standar GDrive menjadi link direct image agar bisa tampil di tag <img>
-                            // Mengubah 'open?id=' atau 'file/d/.../view' menjadi 'uc?export=view&id='
+                            // Konversi link Google Drive agar bisa langsung tampil ke gambar
                             let srcFoto = tamu.linkFoto;
                             if (srcFoto.includes('id=')) {
                                 const id = srcFoto.split('id=')[1];
@@ -130,35 +194,33 @@
                                 srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
                             }
 
-                            // Template HTML untuk setiap kartu foto
-                            const card = `
-                               <div class="photo-card">
-                                    <div class="photo-wrapper">
-                                        <img src="${srcFoto}" alt="Foto dari ${tamu.nama}" loading="lazy">
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="guest-name">✨ ${tamu.nama}</div>
-                                        <div class="guest-wish">"${tamu.keterangan}"</div>
+                            // Struktur HTML ala postingan grid Instagram
+                            const postItem = `
+                                <div class="feed-item">
+                                    <img src="${srcFoto}" alt="Foto dari ${tamu.nama}" loading="lazy">
+                                    <div class="feed-overlay">
+                                        <div class="overlay-name">👤 ${tamu.nama}</div>
+                                        <div class="overlay-wish">"${tamu.keterangan}"</div>
                                     </div>
                                 </div>
                             `;
-                            grid.innerHTML += card;
+                            feed.innerHTML += postItem;
                         });
                     } else {
-                        grid.innerHTML = `<p style="text-align:center; grid-column: 1/-1; color:#7f8c8d;">Belum ada foto yang dibagikan.</p>`;
+                        feed.innerHTML = `<p style="text-align:center; grid-column: 1/-1; color:#8e8e8e; padding: 40px;">Belum ada kiriman foto.</p>`;
                     }
                 })
                 .catch(err => {
-                    console.error("Gagal memuat data:", err);
-                    document.getElementById('loader').innerText = "Gagal memuat album foto.";
+                    console.error("Gagal memuat feed:", err);
+                    document.getElementById('loader').innerText = "Gagal memuat feed Instagram.";
                 });
         }
 
-        // Jalankan fungsi saat halaman dibuka
-        muatGaleri();
+        // Jalankan fungsi saat web dibuka
+        muatGaleriInstagram();
 
-        // Fitur Auto-Refresh: Otomatis mengambil data baru setiap 30 detik tanpa perlu reload halaman
-        setInterval(muatGaleri, 30000);
+        // Auto refresh setiap 20 detik agar feed terus update otomatis di layar laptop/proyektor
+        setInterval(muatGaleriInstagram, 20000);
     </script>
 </body>
 </html>
