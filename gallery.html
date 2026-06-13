@@ -115,14 +115,14 @@
                     loader.style.display = 'none';
                     grid.innerHTML = ''; // Kosongkan grid sebelum diisi data baru
 
-                    if(res.result === "success" && res.data.length > 0) {
+if(res.result === "success" && res.data.length > 0) {
                         // Urutkan data dari yang terbaru (membalikkan urutan array)
                         const dataTerbaru = res.data.reverse();
 
                         dataTerbaru.forEach(tamu => {
                             // Mengubah link standar GDrive menjadi link direct image agar bisa tampil di tag <img>
                             // Mengubah 'open?id=' atau 'file/d/.../view' menjadi 'uc?export=view&id='
-                         let srcFoto = tamu.linkFoto;
+                            let srcFoto = tamu.linkFoto;
                             if (srcFoto.includes('id=')) {
                                 const id = srcFoto.split('id=')[1];
                                 srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
@@ -130,7 +130,6 @@
                                 const id = srcFoto.split('/d/')[1].split('/')[0];
                                 srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
                             }
-
                             // Template HTML untuk setiap kartu foto
                             const card = '
                                 <div class="photo-card">
