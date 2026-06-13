@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self Photoboth Wedding Surya-Leli</title>
+    <style>
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        /* 1. Daftarkan font lokal kamu */
+        @font-face {
+        font-family: 'NamaFontKustom'; /* Bebas memberi nama apa saja */
+        src: url('fonts/josephsophia.woff2') format('woff2'),
+          url('fonts/josephsophia.ttf') format('truetype'); /* Fallback jika woff2 tidak didukung */
+        font-weight: normal;
+        font-style: normal;
+}
+
+/* 2. Terapkan font ke elemen */
+        h1 {
+        font-family: 'NamaFontKustom', Arial, sans-serif;
+        color: #d67cb4;
+    }   
+        body {
+            /* Latar belakang biru muda yang lembut (Baby Blue) */
+            background-color: #e6f7ff; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .form-container {
+            /* Wadah form berwarna putih bersih */
+            background-color: #ffffff;
+            padding: 35px;
+            border-radius: 20px;
+            /* Bayangan lembut dengan semburat pink */
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.2);
+            width: 100%;
+            max-width: 550px;
+            /* Batas tipis berwarna baby pink */
+            border: 2px solid #ffdde1;
+        }
+        h1 {
+            /* Judul berwarna biru tua yang elegan */
+            color:#004085;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        h3 {
+            /* Judul berwarna biru tua yang elegan */
+            color:  #d67cb4;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            /* Subtitle berwarna biru keabu-abuan */
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 9px;
+            /* Label berwarna biru tua */
+            color: #004085;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 14px 18px;
+            /* Batas input berwarna biru muda */
+            border: 1.5px solid #b3d7ff;
+            border-radius: 10px;
+            background-color: #fbfdff;
+            color: #333;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            /* Fokus input berubah menjadi baby pink */
+            border-color: #ffb6c1;
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(255, 182, 193, 0.25);
+        }
+
+        /* Area Upload Foto */
+        .upload-area {
+            /* Batas putus-putus berwarna baby pink */
+            border: 2.5px dashed #ffc0cb;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            /* Latar belakang sangat muda baby pink */
+            background-color: #fff5f6;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            /* Hover area upload menjadi sedikit lebih gelap */
+            border-color: #ff99aa;
+            background-color: #ffebee;
+        }
+
+        .upload-area input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+            /* Ikon berwarna pink lembut */
+            color: #ff8095;
+        }
+
+        .upload-text {
+            /* Teks utama upload berwarna biru tua */
+            color: #004085;
+            font-size: 14px;
+        }
+
+        .upload-hint {
+            /* Petunjuk upload berwarna abu-abu */
+            color: #888;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        /* Pratinjau Foto */
+        .preview-container {
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 12px;
+            /* Bayangan foto dengan sentuhan biru */
+            box-shadow: 0 5px 15px rgba(0, 64, 133, 0.1);
+            border: 3px solid #fff;
+        }
+
+        /* Tombol Aksi */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 35px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-cancel {
+            /* Tombol Batal berwarna putih dengan batas biru */
+            background-color: #fff;
+            color: #007bff;
+            border: 1.5px solid #b3d7ff;
+        }
+
+        .btn-cancel:hover {
+            background-color: #f0f7ff;
+            border-color: #007bff;
+        }
+
+        .btn-submit {
+            /* Tombol Simpan berwarna biru tua (Royal Blue) */
+            background-color: #0056b3;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 86, 179, 0.2);
+        }
+
+        .btn-submit:hover {
+            background-color: #004085;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 86, 179, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h3>Self Fotoboth in The Wedding</h3>
+    <h1>Surya Leli</h1>
+    <p class="subtitle">Silakan lengkapi detail momen pernikahan di bawah ini</p>
+
+    <!-- Form -->
+    <form id="uploadForm"  enctype="multipart/form-data">
+        
+        <!-- Input Nama -->
+        <div class="form-group">
+            <label for="nama
+            ">Nama</label>
+            <input type="text" id="nama
+            " name="nama" placeholder="Masukan nama" required>
+        </div>
+
+        <!-- Input Keterangan -->
+        <div class="form-group">
+            <label for="keterangan">Keterangan / Cerita</label>
+            <textarea id="keterangan" name="keterangan" rows="5" placeholder="Ucapan / informasi penting mengenai momen ini..." required></textarea>
+        </div>
+
+        <!-- Input Foto -->
+        <div class="form-group">
+            <label>Foto Terbaik Momen</label>
+            <div class="upload-area">
+                <div class="upload-icon">🤍</div>
+                <div class="upload-text"><strong>Klik untuk unggah</strong> atau tarik foto Anda</div>
+                <div class="upload-hint">Format: JPG, PNG, WebP (Maks. 5MB)</div>
+                <input type="file" id="foto" name="foto" accept="image/*" required>
+            </div>
+            
+            <!-- Wadah Pratinjau Foto -->
+            <div class="preview-container" id="previewContainer">
+                <p style="font-size: 13px; color: #6c757d; margin-bottom: 8px;">Pratinjau Foto:</p>
+                <img src="" alt="Pratinjau Foto" class="preview-image" id="previewImage">
+            </div>
+        </div>
+
+        <!-- Tombol Batal & Simpan -->
+        <div class="button-group">
+            <button type="button" class="btn btn-cancel">Batal</button>
+            <button type="submit" id="submitBtn" class="btn btn-submit">Simpan Data</button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    // Script JavaScript untuk mengaktifkan fitur Live Preview Foto
+    const fotoInput = document.getElementById('foto');
+    const previewContainer = document.getElementById('previewContainer');
+    const previewImage = document.getElementById('previewImage');
+
+    fotoInput.addEventListener('change', function() {
+        const file = this.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.addEventListener('load', function() {
+                previewImage.setAttribute('src', this.result);
+                previewContainer.style.display = 'block'; // Tampilkan pratinjau
+            });
+            
+            reader.readAsDataURL(file);
+        } else {
+            previewImage.setAttribute('src', '');
+            previewContainer.style.display = 'none'; // Sembunyikan jika batal pilih
+        }
+    });
+    // GANTI DENGAN URL WEB APP DARI GOOGLE APPS SCRIPT ANDA
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw4yIWS-foqFjDCMoBllcGOTafofG70I0e8bYOMZBXyxttLeAMWBYd6TnskomyKXLQpIg/exec";
+
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Sedang Mengirim...";
+
+        const nama = document.getElementById('nama').value;
+        const keterangan = document.getElementById('keterangan').value;
+        const fileInput = document.getElementById('foto').files[0];
+
+        const reader = new FileReader();
+        reader.readAsDataURL(fileInput);
+        
+        reader.onload = function() {
+            const fileData = reader.result; // Ini string base64 dari foto
+            const namaFoto = fileInput.name;
+
+            // Kirim data menggunakan FormData/URLSearchParams ke Google Apps Script
+            const urlEncodedData = new URLSearchParams();
+            urlEncodedData.append("nama", nama);
+            urlEncodedData.append("keterangan", keterangan);
+            urlEncodedData.append("namaFoto", namaFoto);
+            urlEncodedData.append("fileData", fileData);
+
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                mode: "no-cors", // Penting untuk menghindari error CORS di Google Apps Script
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: urlEncodedData
+            })
+            .then(() => {
+                alert("Terima kasih! Foto dan ucapan Anda berhasil disimpan. ❤️");
+                document.getElementById('uploadForm').reset();
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Kirim Kenangan";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Waduh, ada masalah saat mengirim data.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Kirim Kenangan";
+            });
+        };
+    });
+</script>
+
+</body>
+</html>
