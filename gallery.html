@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Gallery - Album Foto Tamu</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edea 100%);
+            padding: 40px 20px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        p.subtitle {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        /* Grid Layout Estetis */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        /* Desain Kartu Foto */
+        .photo-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+        .photo-wrapper {
+            width: 100%;
+            height: 350px; /* Tinggi seragam agar rapi */
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        .photo-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Foto otomatis terpotong rapi tanpa distorsi */
+            transition: transform 0.5s ease;
+        }
+        .photo-card:hover .photo-wrapper img {
+            transform: scale(1.05);
+        }
+        /* Detail Teks */
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .guest-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .guest-wish {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.5;
+            font-style: italic;
+            flex-grow: 1;
+        }
+        /* Loading Animasi */
+        .loader {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📸 DIGITAL ALBUM & WISHES</h1>
+    <p class="subtitle">Kumpulan momen bahagia dan ucapan dari para tamu undangan</p>
+
+    <div id="loader" class="loader">Memuat foto-foto kenangan...</div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+
+    <script>
+        // GANTI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
+        const WEB_APP_URL = "PASTE_URL_WEB_APP_APPS_SCRIPT_DISINI";
+
+        function muatGaleri() {
+            fetch(WEB_APP_URL)
+                .then(response => response.json())
+                .then(res => {
+                    const loader = document.getElementById('loader');
+                    const grid = document.getElementById('galleryGrid');
+                    
+                    // Sembunyikan loader
+                    loader.style.display = 'none';
+                    grid.innerHTML = ''; // Kosongkan grid sebelum diisi data baru
+
+                    if(res.result === "success" && res.data.length > 0) {
+                        // Urutkan data dari yang terbaru (membalikkan urutan array)
+                        const dataTerbaru = res.data.reverse();
+
+                        dataTerbaru.forEach(tamu => {
+                            // Mengubah link standar GDrive menjadi link direct image agar bisa tampil di tag <img>
+                            // Mengubah 'open?id=' atau 'file/d/.../view' menjadi 'uc?export=view&id='
+                            let srcFoto = tamu.linkFoto;
+                            if (srcFoto.includes('id=')) {
+                                const id = srcFoto.split('id=')[1];
+                                srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
+                            } else if (srcFoto.includes('/d/')) {
+                                const id = srcFoto.split('/d/')[1].split('/')[0];
+                                srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
+                            }
+
+                            // Template HTML untuk setiap kartu foto
+                            const card = `
+                                <div class="photo-card">
+                                    <div class="photo-wrapper">
+                                        <img src="${srcFoto}" alt="Foto dari ${tamu.nama}" loading="lazy">
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="guest-name">✨ ${tamu.nama}</div>
+                                        <div class="guest-wish">"${tamu.keterangan}"</div>
+                                    </div>
+                                </div>
+                            `;
+                            grid.innerHTML += card;
+                        });
+                    } else {
+                        grid.innerHTML = `<p style="text-align:center; grid-column: 1/-1; color:#7f8c8d;">Belum ada foto yang dibagikan.</p>`;
+                    }
+                })
+                .catch(err => {
+                    console.error("Gagal memuat data:", err);
+                    document.getElementById('loader').innerText = "Gagal memuat album foto.";
+                });
+        }
+
+        // Jalankan fungsi saat halaman dibuka
+        muatGaleri();
+
+        // Fitur Auto-Refresh: Otomatis mengambil data baru setiap 30 detik tanpa perlu reload halaman
+        setInterval(muatGaleri, 30000);
+    </script>
+</body>
+</html>
