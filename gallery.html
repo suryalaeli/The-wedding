@@ -120,24 +120,22 @@
                         const dataTerbaru = res.data.reverse();
 
                         dataTerbaru.forEach(tamu => {
-                            // Contoh jika 'linkFoto' adalah variabel url dari Google Sheets Anda
-                        let linkFoto = dataDariSheets.linkFoto; 
+                            // Mengubah link standar GDrive menjadi link direct image agar bisa tampil di tag <img>
+                            // Mengubah 'open?id=' atau 'file/d/.../view' menjadi 'uc?export=view&id='
+                            let srcFoto = tamu.linkFoto;
+                            if (srcFoto.includes('id=')) {
+                                const id = srcFoto.split('id=')[1];
+                                srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
+                            } else if (srcFoto.includes('/d/')) {
+                                const id = srcFoto.split('/d/')[1].split('/')[0];
+                                srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
+                            }
 
-                        // Fungsi untuk mengubah link Drive biasa menjadi Direct Link Gambar
-                        if (linkFoto.includes("drive.google.com")) {
-                        // Mengambil ID unik file foto
-                        let fileId = linkFoto.match(/[-\w]{25,}/)[0];
-                        // Mengubahnya menjadi format direct link uc (user content)
-                        linkFoto = https://lh3.googleusercontent.com/d/${fileId};
-                        }
-
-                        // Masukkan hasil 'linkFoto' yang baru ini ke dalam atribut src tag img Anda
-                        // Contoh: elemenImg.src = linkFoto;
                             // Template HTML untuk setiap kartu foto
                             const card = `
                                 <div class="photo-card">
                                     <div class="photo-wrapper">
-                                        <img src="${linkFoto}" alt="Foto dari ${tamu.nama}" loading="lazy">
+                                        <img src="${srcFoto}" alt="Foto dari ${tamu.nama}" loading="lazy">
                                     </div>
                                     <div class="card-body">
                                         <div class="guest-name">✨ ${tamu.nama}</div>
