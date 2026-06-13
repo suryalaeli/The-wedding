@@ -125,10 +125,10 @@
                             let srcFoto = tamu.linkFoto;
                             if (srcFoto.includes('id=')) {
                                 const id = srcFoto.split('id=')[1];
-                                srcFoto = 'drive.usercontent.google.com/download?export=view&id=${id}';
+                                srcFoto = 'https://drive.usercontent.google.com/download?export=view&id=${id}';
                             } else if (srcFoto.includes('/d/')) {
                                 const id = srcFoto.split('/d/')[1].split('/')[0];
-                                srcFoto = 'drive.usercontent.google.com/download?export=view&id=${id}';
+                                srcFoto = 'https://drive.usercontent.google.com/download?export=view&id=${id}';
                             }
 
                             // Template HTML untuk setiap kartu foto
