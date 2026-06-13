@@ -13,6 +13,19 @@
             --dark-pink: #FFB6C1;       /* Pink untuk Hover/Aksen */
             --text-dark: #2C3E50;       /* Warna Teks Utama */
         }
+        /* 1. Daftarkan font lokal kamu */
+@font-face {
+    font-family: 'NamaFontKustom'; /* Bebas memberi nama apa saja */
+    src: url('fonts/josephsophiar.woff2') format('woff2'),
+         url('fonts/josephsophia.ttf') format('truetype'); /* Fallback jika woff2 tidak didukung */
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 2. Terapkan font ke elemen */
+h1 {
+    font-family: 'NamaFontKustom', Arial, sans-serif;
+}
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -40,14 +53,14 @@
 
         /* Ornamen & Judul Pengantin */
         .wedding-header h2 {
-            font-family: 'Georgia', serif;
+            font-family: 'open sans', serif;
             font-size: 28px;
             color: var(--primary-blue);
             margin-bottom: 5px;
             letter-spacing: 1px;
         }
         .wedding-header h1 {
-            font-family: 'Georgia', serif;
+            font-family: 'open sans', serif;
             font-size: 36px;
             color: #ff8fa3; /* Kombinasi pink tua */
             margin-bottom: 15px;
@@ -174,12 +187,12 @@
     <form id="uploadForm">
         <div class="input-group">
             <label for="nama">Nama Anda</label>
-            <input type="text" id="nama" required placeholder="Contoh: Budi Santoso">
+            <input class="huruf" type="text" id="nama" required placeholder="Nama Lengkap">
         </div>
         
         <div class="input-group">
             <label for="keterangan">Ucapan / Doa Restu</label>
-            <textarea id="keterangan" rows="3" required placeholder="Tulis ucapan selamat untuk kedua mempelai..."></textarea>
+            <textarea class="huruf" id="keterangan" rows="3" required placeholder="Tulis ucapan selamat untuk kedua mempelai..."></textarea>
         </div>
         
         <div class="input-group">
