@@ -125,14 +125,14 @@
                             let srcFoto = tamu.linkFoto;
                             if (srcFoto.includes('id=')) {
                                 const id = srcFoto.split('id=')[1];
-                                srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
+                                srcFoto = 'https://docs.google.com/uc?export=view&id=${id}';
                             } else if (srcFoto.includes('/d/')) {
                                 const id = srcFoto.split('/d/')[1].split('/')[0];
-                                srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
+                                srcFoto = 'https://docs.google.com/uc?export=view&id=${id}';
                             }
 
                             // Template HTML untuk setiap kartu foto
-                            const card = `
+                            const card = '
                                 <div class="photo-card">
                                     <div class="photo-wrapper">
                                         <img src="${srcFoto}" alt="Foto dari ${tamu.nama}" loading="lazy">
@@ -142,7 +142,7 @@
                                         <div class="guest-wish">"${tamu.keterangan}"</div>
                                     </div>
                                 </div>
-                            `;
+                            ';
                             grid.innerHTML += card;
                         });
                     } else {
