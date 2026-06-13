@@ -115,9 +115,10 @@
                     loader.style.display = 'none';
                     grid.innerHTML = ''; // Kosongkan grid sebelum diisi data baru
 
-if(res.result === "success" && res.data.length > 0) {
+                    if(res.result === "success" && res.data.length > 0) {
                         // Urutkan data dari yang terbaru (membalikkan urutan array)
-                        dataTerbaru.forEach(tamu => {
+                        const dataTerbaru = res.data.reverse();
+dataTerbaru.forEach(tamu => {
     // Sesuai dengan nama kolom atau properti JSON yang Anda kirim dari Apps Script.
     // Jika di JSON namanya 'linkFoto', gunakan tamu.linkFoto. Jika 'fileUrl', gunakan tamu.fileUrl
     let srcFoto = tamu.linkFoto || tamu.fileUrl || tamu.url; 
@@ -157,6 +158,6 @@ if(res.result === "success" && res.data.length > 0) {
 
         // Fitur Auto-Refresh: Otomatis mengambil data baru setiap 30 detik tanpa perlu reload halaman
         setInterval(muatGaleri, 30000);
-    </script>0
+    </script>
 </body>
 </html>
