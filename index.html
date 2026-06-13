@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guestbook & Photo Album</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; }
+        .form-container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .input-group input, .input-group textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:disabled { background-color: #cccccc; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Selamat Datang! ✨</h2>
+    <p>Silakan isi nama, ucapan, dan foto keseruan Anda di acara kami.</p>
+    
+    <form id="uploadForm">
+        <div class="input-group">
+            <label for="nama">Nama</label>
+            <input type="text" id="nama" required placeholder="Nama Anda">
+        </div>
+        
+        <div class="input-group">
+            <label for="keterangan">Ucapan / Keterangan</label>
+            <textarea id="keterangan" rows="3" required placeholder="Tulis ucapan selamat atau kesan pesan..."></textarea>
+        </div>
+        
+        <div class="input-group">
+            <label for="foto">Pilih Foto</label>
+            <input type="file" id="foto" accept="image/*" required>
+        </div>
+        
+        <button type="submit" id="submitBtn">Kirim Kenangan</button>
+    </form>
+</div>
+
+<script>
+    // GANTI DENGAN URL WEB APP DARI GOOGLE APPS SCRIPT ANDA
+    const WEB_APP_URL = "PASTE_URL_WEB_APP_APPS_SCRIPT_DISINI";
+
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Sedang Mengirim...";
+
+        const nama = document.getElementById('nama').value;
+        const keterangan = document.getElementById('keterangan').value;
+        const fileInput = document.getElementById('foto').files[0];
+
+        const reader = new FileReader();
+        reader.readAsDataURL(fileInput);
+        
+        reader.onload = function() {
+            const fileData = reader.result; // Ini string base64 dari foto
+            const namaFoto = fileInput.name;
+
+            // Kirim data menggunakan FormData/URLSearchParams ke Google Apps Script
+            const urlEncodedData = new URLSearchParams();
+            urlEncodedData.append("nama", nama);
+            urlEncodedData.append("keterangan", keterangan);
+            urlEncodedData.append("namaFoto", namaFoto);
+            urlEncodedData.append("fileData", fileData);
+
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                mode: "no-cors", // Penting untuk menghindari error CORS di Google Apps Script
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: urlEncodedData
+            })
+            .then(() => {
+                alert("Terima kasih! Foto dan ucapan Anda berhasil disimpan. ❤️");
+                document.getElementById('uploadForm').reset();
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Kirim Kenangan";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Waduh, ada masalah saat mengirim data.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Kirim Kenangan";
+            });
+        };
+    });
+</script>
+
+</body>
+</html>
