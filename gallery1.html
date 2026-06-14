@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram-Style Guest Gallery</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fafafa;
+            color: #262626;
+            padding-bottom: 50px;
+        }
+
+        /* Header Ala Profil Instagram */
+        .instagram-header {
+            max-width: 935px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #dbdbdb;
+        }
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            padding: 4px;
+            margin-right: 60px;
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background: white;
+            border: 4px solid white;
+        }
+        .profile-info h1 {
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 15px;
+        }
+        .profile-bio {
+            font-size: 16px;
+            line-height: 24px;
+        }
+        .profile-bio strong { font-weight: 600; }
+
+        /* Grid Foto 3 Kolom (Instagram Feed) */
+        .instagram-feed {
+            max-width: 935px;
+            margin: 30px auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            padding: 0 20px;
+        }
+
+        /* Item Foto berbentuk Kotak 1:1 */
+        .feed-item {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            cursor: pointer;
+            overflow: hidden;
+            background-color: #efefef;
+        }
+        .feed-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: filter 0.3s ease;
+        }
+
+        /* Overlay Gelap Saat Hover */
+        .feed-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+            text-align: center;
+        }
+        .feed-item:hover .feed-overlay {
+            opacity: 1;
+        }
+        .overlay-name {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        .overlay-wish {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* ----- STYLE BARU: POP-UP MODAL LIGHTBOX ----- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 9999;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-container {
+            background: white;
+            max-width: 850px;
+            width: 100%;
+            max-height: 90vh;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+        .modal-photo-wrapper {
+            flex: 1.2;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-photo-wrapper img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+        .modal-info-sidebar {
+            flex: 0.8;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-left: 1px solid #efefef;
+        }
+        .modal-user {
+            font-weight: 700;
+            font-size: 18px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #efefef;
+            margin-bottom: 20px;
+            color: #262626;
+        }
+        .modal-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #4a4a4a;
+            font-style: italic;
+            word-break: break-word;
+            overflow-y: auto;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 35px;
+            color: #ffffff;
+            cursor: pointer;
+            z-index: 10000;
+            background: none;
+            border: none;
+            outline: none;
+            transition: transform 0.2s;
+        }
+        .modal-close-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Indikator Loading */
+        .loader {
+            text-align: center;
+            padding: 50px;
+            font-size: 16px;
+            color: #8e8e8e;
+        }
+
+        /* Responsif Mobile & Layar Kecil */
+        @media (max-width: 768px) {
+            .instagram-header { padding: 20px; }
+            .profile-avatar { width: 90px; height: 90px; margin-right: 25px; }
+            .profile-info h1 { font-size: 22px; }
+            .instagram-feed { gap: 3px; padding: 0; }
+            .feed-overlay { display: none; } /* Matikan hover overlay di HP agar tidak mengganggu ketukan */
+            
+            /* Ubah Pop-up menjadi Memanjang ke Bawah di HP */
+            .modal-container {
+                flex-direction: column;
+                max-height: 85vh;
+            }
+            .modal-photo-wrapper {
+                flex: none;
+                height: 50%;
+            }
+            .modal-info-sidebar {
+                flex: none;
+                height: 50%;
+                padding: 20px;
+            }
+            .modal-close-btn {
+                color: #ffffff;
+                text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="instagram-header">
+        <div class="profile-avatar">
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=500" alt="Acara Logo">
+        </div>
+        <div class="profile-info">
+            <h1>budi.annisa.wedding</h1>
+            <div class="profile-bio">
+                <strong>Surya & Leli Digital Album</strong><br>
+                ✨ Diabadikan oleh para tamu undangan kesayangan.<br>
+                📍 Lokasi Acara Pernikahan
+            </div>
+        </div>
+    </header>
+
+    <div id="loader" class="loader">Memuat feed galeri...</div>
+    <main class="instagram-feed" id="instagramFeed"></main>
+
+    <div class="modal-overlay" id="photoModal">
+        <button class="modal-close-btn" id="closeModal">&times;</button>
+        <div class="modal-container">
+            <div class="modal-photo-wrapper">
+                <img id="modalImg" src="" alt="Foto Besar">
+            </div>
+            <div class="modal-info-sidebar">
+                <div class="modal-user" id="modalUser">👤 Nama Tamu</div>
+                <div class="modal-text" id="modalText">"Ucapan doa restu tamu..."</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw4yIWS-foqFjDCMoBllcGOTafofG70I0e8bYOMZBXyxttLeAMWBYd6TnskomyKXLQpIg/exec";
+        
+        // Globals untuk Modal
+        const modal = document.getElementById('photoModal');
+        const modalImg = document.getElementById('modalImg');
+        const modalUser = document.getElementById('modalUser');
+        const modalText = document.getElementById('modalText');
+        const closeModal = document.getElementById('closeModal');
+
+        function muatGaleriInstagram() {
+            fetch(WEB_APP_URL)
+                .then(response => response.json())
+                .then(res => {
+                    const loader = document.getElementById('loader');
+                    const feed = document.getElementById('instagramFeed');
+                    
+                    loader.style.display = 'none';
+                    feed.innerHTML = ''; 
+
+                    if(res.result === "success" && res.data.length > 0) {
+                        const dataTerbaru = res.data.reverse();
+
+                        dataTerbaru.forEach(tamu => {
+                            let srcFoto = tamu.linkFoto;
+                            if (srcFoto.includes('id=')) {
+                                const id = srcFoto.split('id=')[1].split('&')[0];
+                                srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
+                            } else if (srcFoto.includes('/d/')) {
+                                const id = srcFoto.split('/d/')[1].split('/')[0];
+                                srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
+                            }
+
+                            // Membuat element item feed baru
+                            const postItem = document.createElement('div');
+                            postItem.className = 'feed-item';
+                            postItem.innerHTML = `
+                                <img src="${srcFoto}" alt="Foto dari ${tamu.nama}" loading="lazy">
+                                <div class="feed-overlay">
+                                    <div class="overlay-name">👤 ${tamu.nama}</div>
+                                    <div class="overlay-wish">"${tamu.keterangan}"</div>
+                                </div>
+                            `;
+
+                            // EVENT KLIK: Memicu Fungsi Buka Pop-up Gambar Besar
+                            postItem.addEventListener('click', function() {
+                                bukaPopup(srcFoto, tamu.nama, tamu.keterangan);
+                            });
+
+                            feed.appendChild(postItem);
+                        });
+                    } else {
+                        feed.innerHTML = `<p style="text-align:center; grid-column: 1/-1; color:#8e8e8e; padding: 40px;">Belum ada kiriman foto.</p>`;
+                    }
+                })
+                .catch(err => {
+                    console.error("Gagal memuat feed:", err);
+                    document.getElementById('loader').innerText = "Gagal memuat feed Instagram.";
+                });
+        }
+
+        // Fungsi Membuka Pop-up Modal
+        function bukaPopup(imgSrc, nama, ucapan) {
+            modalImg.src = imgSrc;
+            modalUser.innerText = "👤 " + nama;
+            modalText.innerText = `"${ucapan}"`;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Kunci scroll layar utama saat pop-up aktif
+        }
+
+        // Fungsi Menutup Pop-up Modal
+        function tutupPopup() {
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; // Aktifkan kembali scroll
+        }
+
+        // Event listener untuk tombol close dan klik di luar area gambar
+        closeModal.addEventListener('click', tutupPopup);
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                tutupPopup();
+            }
+        });
+
+        // Jalankan fungsi saat web dibuka
+        muatGaleriInstagram();
+
+        // Auto refresh setiap 20 detik
+        setInterval(muatGaleriInstagram, 20000);
+    </script>
+</body>
+</html>
