@@ -180,6 +180,25 @@
             cursor: not-allowed;
             transform: none;
         }
+        /* Gaya Tampilan Tombol Link Galeri */
+.gallery-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #4A90E2; /* Warna Biru Elegan */
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    border-radius: 15px;
+    background-color: rgba(74, 144, 226, 0.05);
+}
+
+.gallery-link:hover {
+    color: #ff8fa3; /* Berubah Pink saat disentuh */
+    background-color: rgba(255, 209, 220, 0.2);
+    transform: translateY(-1px);
+}
     </style>
 </head>
 <body>
@@ -216,9 +235,10 @@
         </div>
         
         <button type="submit" id="submitBtn">Kirim Kenangan ✨</button>
+        
     </form>
+  <a href="https://suryalaeli.github.io/The-wedding/gallery.htmll" class="gallery-link">📸 Lihat Album Foto Tamu</a>
 </div>
-
 <script>
      // GANTI DENGAN URL WEB APP DARI GOOGLE APPS SCRIPT ANDA
           const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw4yIWS-foqFjDCMoBllcGOTafofG70I0e8bYOMZBXyxttLeAMWBYd6TnskomyKXLQpIg/exec";
