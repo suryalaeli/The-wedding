@@ -11,33 +11,28 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #fafafa;
             color: #262626;
-            padding-bottom: 50px;
-        }
-/* Style Statistik ala Instagram */
-        .profile-stats {
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-        .profile-stats span {
-            color: #262626;
-        }
-        .profile-stats strong {
-            font-weight: 600;
-        }
-        
+            padding-bottom: 50px;        
        
         
         /* Header Ala Profil Instagram */
-        @media (max-width: 768px) {
-    .instagram-header {
-        padding: 20px;
-        flex-direction: row;
-        align-items: center; /* Menjaga posisi avatar dan teks tetap sejajar di tengah */
-    }
-             .profile-stats {
-                margin-bottom: 8px;
-                font-size: 14px;
-                  }
+        .instagram-header {
+            max-width: 935px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #dbdbdb;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(20deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            padding: 4px;
+           object-fit: cover;
+            margin-right: 60px;
+        }
+        /* Header Ala Profil Instagram */
     
     /* Membuat pembungkus avatar menjadi kotak sempurna di HP */
     .profile-avatar {
@@ -227,6 +222,7 @@
 
         /* Responsif Mobile & Layar Kecil */
         @media (max-width: 768px) {
+            
             .instagram-header { padding: 20px; }
             .profile-avatar { width: 90px; height: 90px; margin-right: 25px; }
             .profile-info h1 { font-size: 22px; }
@@ -262,7 +258,6 @@
         </div>
         <div class="profile-info">
             <h1>The Wedding of Surya Leli</h1>
-            <div class="profile-stats">
             <div class="profile-bio">
                 <strong>Guesbook Digital Album</strong><br>
                 ✨ Diabadikan oleh para tamu undangan kesayangan.<br>
