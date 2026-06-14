@@ -36,7 +36,16 @@
             padding: 20px;
             color: var(--text-dark);
         }
+/* 1. Menyelaraskan font text area dengan Montserrat */
+.input-group textarea {
+    font-family: 'Montserrat', sans-serif;
+}
 
+/* 2. Memperkecil ukuran placeholder khusus pada input nama */
+#nama::placeholder {
+    font-size: 12px; /* Ukuran bisa disesuaikan, standar bawaannya sekitar 15px */
+    opacity: 0.7;    /* Membuat warnanya sedikit lebih lembut/transparan */
+}
         .form-container {
             background: rgba(255, 255, 255, 0.95);
             max-width: 450px;
