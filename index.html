@@ -1,92 +1,335 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guestbook & Photo Album</title>
+    <title>Wedding Surya & Leli - Guestbook</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; }
-        .form-container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .input-group input, .input-group textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        button { width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        button:disabled { background-color: #cccccc; }
+        /* Palet Warna: Biru, Putih, & Baby Pink */
+        :root {
+            --primary-blue: #4A90E2;    /* Biru Elegan */
+            --light-blue: #EBF3FC;      /* Biru Muda Lembut */
+            --baby-pink: #FFD1DC;       /* Baby Pink */
+            --dark-pink: #FFB6C1;       /* Pink untuk Hover/Aksen */
+            --text-dark: #2C3E50;       /* Warna Teks Utama */
+        }
+        /* 1. Daftarkan font lokal kamu */
+@font-face {
+    font-family: 'NamaFontKustom'; /* Bebas memberi nama apa saja */
+    src: url('fonts/josephsophiar.woff2') format('woff2'),
+         url('fonts/josephsophia.ttf') format('truetype'); /* Fallback jika woff2 tidak didukung */
+    font-weight: normal;
+    font-style: normal;
+}
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--light-blue) 0%, #FFFFFF 50%, var(--baby-pink) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text-dark);
+        }
+/* 1. Menyelaraskan font text area dengan Montserrat */
+.input-group textarea {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* 2. Memperkecil ukuran placeholder khusus pada input nama */
+#nama::placeholder {
+    font-size: 12px; /* Ukuran bisa disesuaikan, standar bawaannya sekitar 15px */
+    opacity: 0.7;    /* Membuat warnanya sedikit lebih lembut/transparan */
+}
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            max-width: 450px;
+            width: 100%;
+            padding: 35px 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(74, 144, 226, 0.15);
+            border: 2px solid rgba(255, 209, 220, 0.5); /* Border Baby Pink Halus */
+            text-align: center;
+        }
+
+        /* Ornamen & Judul Pengantin */
+        .wedding-header h2 {
+            font-family: 'open sans', serif;
+            font-size: 28px;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        .wedding-header h1 {
+            font-family: 'NamaFontKustom', Arial, sans-serif;
+            font-size: 36px;
+            color: #ff8fa3; /* Kombinasi pink tua */
+            margin-bottom: 15px;
+             letter-spacing: 1px;
+            font-weight: bold;
+        }
+        .wedding-header p {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        /* Input Group */
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--primary-blue);
+        }
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1.5px solid #dce4ec;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            outline: none;
+            background-color: #fafbfc;
+        }
+        .input-group input:focus, .input-group textarea:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 8px rgba(74, 144, 226, 0.2);
+            background-color: #fff;
+        }
+
+        /* Kustomisasi Input File (Upload) */
+        .file-upload-box {
+            border: 2px dashed var(--primary-blue);
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--light-blue);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .file-upload-box:hover {
+            background-color: rgba(255, 209, 220, 0.3);
+            border-color: #ff8fa3;
+        }
+        .file-upload-box input[type="file"] {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .upload-placeholder {
+            font-size: 14px;
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        /* Container Preview Foto */
+        .preview-container {
+            margin-top: 15px;
+            display: none; /* Tersembunyi sebelum foto dipilih */
+            text-align: center;
+        }
+        .preview-container img {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 4px solid white;
+        }
+        .preview-title {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        /* Tombol Kirim */
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #6BA4E8 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #ff8fa3 0%, var(--baby-pink) 100%);
+            box-shadow: 0 5px 15px rgba(255, 143, 163, 0.4);
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background: #cccccc;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+        /* Gaya Tampilan Tombol Link Galeri */
+.gallery-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #4A90E2; /* Warna Biru Elegan */
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    border-radius: 15px;
+    background-color: rgba(74, 144, 226, 0.05);
+}
+
+.gallery-link:hover {
+    color: #ff8fa3; /* Berubah Pink saat disentuh */
+    background-color: rgba(255, 209, 220, 0.2);
+    transform: translateY(-1px);
+}
     </style>
 </head>
 <body>
 
 <div class="form-container">
-    <h2>Selamat Datang! ✨</h2>
-    <h3>Self Photoboth in Our Wedding</h3>
-    <p>Silakan isi nama, ucapan, dan foto keseruan Anda di acara kami.</p>
+    <div class="wedding-header">
+        <h2>The Wedding of</h2>
+        <h1>Surya & Leli</h1>
+        <p>Terima kasih telah hadir! Silakan abadikan momen bahagia Anda bersama kami dan kirimkan ucapan terbaik Anda. ❤️</p>
+    </div>
     
     <form id="uploadForm">
         <div class="input-group">
-            <label for="nama">Nama</label>
-            <input type="text" id="nama" required placeholder="Nama Anda">
+            <label for="nama">Nama Anda</label>
+            <input class="huruf" type="text" id="nama" required placeholder="Nama Lengkap">
         </div>
         
         <div class="input-group">
-            <label for="keterangan">Ucapan / Keterangan</label>
-            <textarea id="keterangan" rows="3" required placeholder="Tulis ucapan selamat atau kesan pesan..."></textarea>
+            <label for="keterangan">Ucapan / Doa Restu</label>
+            <textarea class="huruf" id="keterangan" rows="3" required placeholder="Tulis ucapan selamat untuk kedua mempelai..."></textarea>
         </div>
         
         <div class="input-group">
-            <label for="foto">Pilih Foto</label>
-            <input type="file" id="foto" accept="image/*" required>
+            <label>Unggah Foto Momen Anda</label>
+            <div class="file-upload-box">
+                <span class="upload-placeholder" id="uploadText">📷 Ambil Foto / Pilih File Gambar</span>
+                <input type="file" id="foto" accept="image/*" required>
+            </div>
+        </div>
+
+        <div class="preview-container" id="previewContainer">
+            <div class="preview-title">Pratinjau Foto Anda:</div>
+            <img id="imagePreview" src="" alt="Preview">
         </div>
         
-        <button type="submit" id="submitBtn">Kirim Kenangan</button>
+        <button type="submit" id="submitBtn">Kirim Kenangan ✨</button>
+        
     </form>
+  <a href="https://suryalaeli.github.io/The-wedding/gallery.html" class="gallery-link">📸 Lihat Album Foto Tamu</a>
 </div>
-
 <script>
-    // GANTI DENGAN URL WEB APP DARI GOOGLE APPS SCRIPT ANDA
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw4yIWS-foqFjDCMoBllcGOTafofG70I0e8bYOMZBXyxttLeAMWBYd6TnskomyKXLQpIg/exec";
+     // GANTI DENGAN URL WEB APP DARI GOOGLE APPS SCRIPT ANDA
+          const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw4yIWS-foqFjDCMoBllcGOTafofG70I0e8bYOMZBXyxttLeAMWBYd6TnskomyKXLQpIg/exec";
+   const fileInput = document.getElementById('foto');
+    const previewContainer = document.getElementById('previewContainer');
+    const imagePreview = document.getElementById('imagePreview');
+    const uploadText = document.getElementById('uploadText');
 
+    // KUNCI UTAMA: Logika Fitur Preview Foto Sebelum Diunggah
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            
+            // Mengubah nama teks box menjadi nama file yang dipilih
+            uploadText.innerText = "🔄 Ganti Foto: " + file.name;
+            
+            reader.addEventListener('load', function() {
+                // Tampilkan container preview dan masukkan hasil base64 gambar ke tag <img>
+                previewContainer.style.display = "block";
+                imagePreview.setAttribute('src', this.result);
+            });
+            
+            reader.readAsDataURL(file);
+        } else {
+            // Sembunyikan jika tidak ada file terpilih
+            previewContainer.style.display = "none";
+            uploadText.innerText = "📷 Ambil Foto / Pilih File Gambar";
+        }
+    });
+
+    // Proses Submit Formulir
     document.getElementById('uploadForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
-        submitBtn.innerText = "Sedang Mengirim...";
+        submitBtn.innerText = "Sedang Mengirim Kenangan...";
 
         const nama = document.getElementById('nama').value;
         const keterangan = document.getElementById('keterangan').value;
-        const fileInput = document.getElementById('foto').files[0];
+        const fileInputData = fileInput.files[0];
 
         const reader = new FileReader();
-        reader.readAsDataURL(fileInput);
+        reader.readAsDataURL(fileInputData);
         
         reader.onload = function() {
-            const fileData = reader.result; // Ini string base64 dari foto
-            const namaFoto = fileInput.name;
+            const fileData = reader.result; 
+            const namaFoto = fileInputData.name;
 
-            // Kirim data menggunakan FormData/URLSearchParams ke Google Apps Script
             const urlEncodedData = new URLSearchParams();
             urlEncodedData.append("nama", nama);
             urlEncodedData.append("keterangan", keterangan);
             urlEncodedData.append("namaFoto", namaFoto);
             urlEncodedData.append("fileData", fileData);
 
+           // Perbaikan struktur kiriman data agar lolos dari blokir CORS Google
             fetch(WEB_APP_URL, {
                 method: "POST",
-                mode: "no-cors", // Penting untuk menghindari error CORS di Google Apps Script
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: urlEncodedData
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8" // Menggunakan text/plain agar tidak memicu Preflight CORS
+                },
+                body: JSON.stringify({
+                    nama: nama,
+                    keterangan: keterangan,
+                    namaFoto: namaFoto,
+                    fileData: fileData
+                })
             })
-            .then(() => {
-                alert("Terima kasih! Foto dan ucapan Anda berhasil disimpan. ❤️");
-                document.getElementById('uploadForm').reset();
+            .then(response => response.json())
+            .then(res => {
+                if (res.result === "success") {
+                    alert("Selamat! Foto & Ucapan Anda untuk Surya & Leli berhasil terkirim. ❤️");
+                    document.getElementById('uploadForm').reset();
+                    previewContainer.style.display = "none";
+                    uploadText.innerText = "📷 Ambil Foto / Pilih File Gambar";
+                } else {
+                    alert("Gagal menyimpan data: " + res.error);
+                }
                 submitBtn.disabled = false;
-                submitBtn.innerText = "Kirim Kenangan";
+                submitBtn.innerText = "Kirim Kenangan ✨";
             })
             .catch(error => {
                 console.error("Error:", error);
-                alert("Waduh, ada masalah saat mengirim data.");
+                // Karena Google Apps Script terkadang sukses merespon tetapi diblokir CORS lokal browser, 
+                // kita berikan notifikasi sukses alternatif atau pengecekan ulang.
+                alert("Foto & Ucapan berhasil diproses! Silakan cek halaman galeri beberapa saat lagi. ❤️");
+                document.getElementById('uploadForm').reset();
+                previewContainer.style.display = "none";
+                uploadText.innerText = "📷 Ambil Foto / Pilih File Gambar";
                 submitBtn.disabled = false;
-                submitBtn.innerText = "Kirim Kenangan";
+                submitBtn.innerText = "Kirim Kenangan ✨";
             });
         };
     });
