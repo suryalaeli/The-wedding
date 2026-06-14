@@ -294,14 +294,26 @@
                         const dataTerbaru = res.data.reverse();
 
                         dataTerbaru.forEach(tamu => {
-                            let srcFoto = tamu.linkFoto;
-                            if (srcFoto.includes('id=')) {
-                                const id = srcFoto.split('id=')[1].split('&')[0];
-                                srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
-                            } else if (srcFoto.includes('/d/')) {
-                                const id = srcFoto.split('/d/')[1].split('/')[0];
-                                srcFoto = `https://docs.google.com/uc?export=view&id=${id}`;
-                            }
+                           let srcFoto = tamu.linkFoto;
+
+// Pastikan link tidak kosong
+if (srcFoto) {
+    let fileId = "";
+    
+    // Pola 1: Jika link mengandung 'id='
+    if (srcFoto.includes('id=')) {
+        fileId = srcFoto.split('id=')[1].split('&')[0];
+    } 
+    // Pola 2: Jika link mengandung '/d/...'
+    else if (srcFoto.includes('/d/')) {
+        fileId = srcFoto.split('/d/')[1].split('/')[0];
+    }
+    
+    // Gunakan endpoint Google Drive Thumbnail (Lebih stabil untuk tag img)
+    if (fileId) {
+        srcFoto = `https://lh3.googleusercontent.com/u/0/d/${fileId}=w400-h400-p`;
+    }
+}
 
                             // Membuat element item feed baru
                             const postItem = document.createElement('div');
