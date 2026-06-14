@@ -13,7 +13,20 @@
             color: #262626;
             padding-bottom: 50px;
         }
-
+/* Style Statistik ala Instagram */
+        .profile-stats {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .profile-stats span {
+            color: #262626;
+        }
+        .profile-stats strong {
+            font-weight: 600;
+        }
+        
+       
+        
         /* Header Ala Profil Instagram */
         @media (max-width: 768px) {
     .instagram-header {
@@ -21,6 +34,10 @@
         flex-direction: row;
         align-items: center; /* Menjaga posisi avatar dan teks tetap sejajar di tengah */
     }
+             .profile-stats {
+                margin-bottom: 8px;
+                font-size: 14px;
+                  }
     
     /* Membuat pembungkus avatar menjadi kotak sempurna di HP */
     .profile-avatar {
@@ -245,6 +262,7 @@
         </div>
         <div class="profile-info">
             <h1>The Wedding of Surya Leli</h1>
+            <div class="profile-stats">
             <div class="profile-bio">
                 <strong>Guesbook Digital Album</strong><br>
                 ✨ Diabadikan oleh para tamu undangan kesayangan.<br>
@@ -289,6 +307,13 @@
                     feed.innerHTML = ''; 
 
                     if(res.result === "success" && res.data.length > 0) {
+                        if (res.result === "success" && res.data.length > 0) {
+    
+    // COPAS SATU BARIS INI TEPAT DI BAWAH "if"
+    document.getElementById('totalFoto').innerText = res.data.length;
+
+    const dataTerbaru = res.data.reverse();
+...
                         const dataTerbaru = res.data.reverse();
 
                         dataTerbaru.forEach(tamu => {
